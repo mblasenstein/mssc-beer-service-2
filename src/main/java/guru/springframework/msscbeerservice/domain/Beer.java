@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-/**
- * Created by jt on 2019-05-17.
- */
 @Getter
 @Setter
 @NoArgsConstructor

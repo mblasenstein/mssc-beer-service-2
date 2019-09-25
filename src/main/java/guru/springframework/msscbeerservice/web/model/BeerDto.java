@@ -15,10 +15,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-/**
- * Created by jt on 2019-05-12.
- */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
