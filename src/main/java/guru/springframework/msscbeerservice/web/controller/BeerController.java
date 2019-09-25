@@ -27,15 +27,21 @@ public class BeerController {
     private final BeerService beerService;
 
     @GetMapping(produces = { "application/json" })
-    public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+    public ResponseEntity<?> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
                                                    @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
-                                                   @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventory) {
+                                                   @RequestParam(value = "showInventoryOnHand", required = false) String showInventoryStr) {
 
         pageNumber = nonNull(pageNumber) && pageNumber > 0 ? pageNumber : DEFAULT_PAGE_NUMBER;
         pageSize = nonNull(pageSize) && pageSize > 1 ? pageSize : DEFAULT_PAGE_SIZE;
-        showInventory = nonNull(showInventory) ? showInventory : DEFAULT_SHOW_INVENTORY;
+
+        Boolean showInventory = DEFAULT_SHOW_INVENTORY;
+        if (nonNull(showInventoryStr) && !showInventoryStr.toLowerCase().equals("true") && !showInventoryStr.toLowerCase().equals("false")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Permitted values for \"showInventoryOnHand\" parameter are \"true\" or \"false\"");
+        } else if (nonNull(showInventoryStr)) {
+            showInventory = Boolean.valueOf(showInventoryStr);
+        }
 
         BeerPagedList beerPagedList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize), showInventory);
 
